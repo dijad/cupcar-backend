@@ -7,7 +7,7 @@ const UserEntity = require('./users/user-entity');
 
 const ValidatorPass = require(appRoot + '/src/utils/validatorPass');
 const { getTypeFailValidationPass } = require(appRoot + '/src/utils/utils');
-const { isEmail, isPhoneNumber, validGender } = require(appRoot + '/src/utils/validator');
+const { isEmail, isPhoneNumber } = require(appRoot + '/src/utils/validator');
 
 async function signUp(firestoreUsers, name, lastname, email, password, gender, phone) {
 
@@ -28,12 +28,6 @@ async function signUp(firestoreUsers, name, lastname, email, password, gender, p
     return {
       status: false,
       data: 'Formato de número de teléfono movil no valido.'}
-  }
-
-  if (!validGender(gender)) {
-    return {
-      status: false,
-      data: 'Género no valido.'}
   }
 
   const passwordValidation = ValidatorPass.validate(password, { list: true });
