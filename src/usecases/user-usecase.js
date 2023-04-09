@@ -9,7 +9,7 @@ const ValidatorPass = require(appRoot + '/src/utils/validatorPass');
 const { getTypeFailValidationPass } = require(appRoot + '/src/utils/utils');
 const { isEmail, isPhoneNumber } = require(appRoot + '/src/utils/validator');
 
-async function signUp(firestoreUsers, name, lastname, email, password, gender, phone) {
+async function signUp(usersRepository, name, lastname, email, password, gender, phone) {
 
   if (!isEmail(email)) {
     return {
@@ -18,7 +18,7 @@ async function signUp(firestoreUsers, name, lastname, email, password, gender, p
     }
   }
 
-  const user = await firestoreUsers.existUser(email);
+  const user = await usersRepository.getUserByEmail(email);
   if (user) return {
     status: false,
     data: 'Esta dirección de correo electrónico ya se encuentra en uso.'
@@ -37,16 +37,16 @@ async function signUp(firestoreUsers, name, lastname, email, password, gender, p
       data: getTypeFailValidationPass(passwordValidation[0]) }
   }
 
-  const userEntity = new UserEntity(name, lastname, email, await encryptPassword(password), gender.toUpperCase(), phone);
-  const responseFirestoreSignUp = await firestoreUsers.signUp(userEntity.serialize());
+  const userEntity = new UserEntity(name, lastname, email, await encryptPassword(password), phone, gender.toUpperCase());
+  const responseSignUp = await usersRepository.signUp(userEntity.serialize());
 
   return {
-    status: responseFirestoreSignUp,
-    data: responseFirestoreSignUp ? 'Registro realizado satisfactoriamente.' : 'No se pudo realizar el registro con exito.'
+    status: responseSignUp,
+    data: responseSignUp ? 'Registro realizado satisfactoriamente.' : 'No se pudo realizar el registro con exito.'
   }
 }
 
-async function login(firestoreUsers, email, password) {
+async function login(usersRepository, email, password) {
 
   if (!isEmail(email)) {
     return {
@@ -55,7 +55,7 @@ async function login(firestoreUsers, email, password) {
     }
   }
 
-  const user = await firestoreUsers.existUser(email);
+  const user = await usersRepository.getUserByEmail(email);
   if (!user) return {
     status: false,
     data: 'Esta dirección de correo electrónico no está asociada a una cuenta.'

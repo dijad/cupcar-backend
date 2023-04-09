@@ -9,7 +9,7 @@
   "author": "Diego Sanchez",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/firestore": "^6.4.2",
+    "@google-cloud/firestore": "^6.5.0",
     "app-root-path": "^3.1.0",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",

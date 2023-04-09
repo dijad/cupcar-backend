@@ -8,14 +8,14 @@ const LoginRouterV1 = require('./adapters/routers/v1/login/login-router');
 const firestore = require('./frameworks/db/firestore');
 
 //Repositorios
-const FirestoreUsers = require('./usecases/users/user-firestore');
+const UsersRepository = require('./usecases/users/user-repository');
 
 //Instanciar repositorios
-const firestoreUsers = new FirestoreUsers(firestore);
+const usersRepository = new UsersRepository(firestore);
 
 let routers = [
-  SignUpRouterV1(firestoreUsers),
-  LoginRouterV1(firestoreUsers)
+  SignUpRouterV1(usersRepository),
+  LoginRouterV1(usersRepository)
 ];
 
 module.exports = createExpressApp(routers);
