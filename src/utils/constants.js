@@ -9,5 +9,20 @@ const VALIDATION_CASES_PASS = {
   'oneOf' : `No son válidas las siguientes contraseñas; ${NOT_VALID_PASS.join(', ')}`
 }
 
+const ROLES = {
+  'client': 'CLIENT',
+  'admin': 'ADMIN'
+}
 
-module.exports = { VALIDATION_CASES_PASS, NOT_VALID_PASS }
+const EXPIRE_OPTIONS = {
+  'oneDay': '1d',
+  'oneHour': '1h'
+}
+
+module.exports =
+{
+  VALIDATION_CASES_PASS,
+  NOT_VALID_PASS,
+  ROLES,
+  EXPIRE_OPTIONS
+}

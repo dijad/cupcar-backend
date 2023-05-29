@@ -1,17 +1,19 @@
 const { Router } = require('express');
 const appRoot = require('app-root-path');
 
+const { ROLES } = require(appRoot + '/src/utils/constants')
+
 const { signUp } = require(appRoot + '/src/usecases/user-usecase')
 
 function signUpRouterV1(usersRepository) {
 
   const router = Router();
 
-  router.get('/v1/sign-up', async (req, res) => {
+  router.post('/v1/clients/sign-up', async (req, res) => {
     try {
       const { name, lastname, email, password, gender, phone } = req.body;
 
-      const reponseSignUp = await signUp(usersRepository, name, lastname, email, password, gender, phone);
+      const reponseSignUp = await signUp(usersRepository, name, lastname, email, password, gender, phone, ROLES.client);
 
       res.status(200).send({
         status: reponseSignUp.status,
