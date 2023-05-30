@@ -10,7 +10,7 @@ async function createExpressApp(routers) {
   dotenv.config();
 
   app.get('/', (req, res) => {
-    res.send('I am TripPartner project :)');
+    res.send('Welcome to a Bigroad :)');
   });
 
   app.set('port', process.env.PORT || 3000);

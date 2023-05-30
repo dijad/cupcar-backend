@@ -19,12 +19,12 @@ function verifyAccountRouterV1(usersRepository) {
       });
     } catch (err) {
       const errBody = {
-          code: 'failed',
-          message: err.message,
-          url: req.originalUrl
-        }
-        console.error("Backend response ->", JSON.stringify(errBody, null, 3))
-        res.status(err.statusCode || 500).send(errBody)
+        code: 'failed',
+        message: err.message,
+        url: req.originalUrl
+      }
+      console.error("Backend response ->", JSON.stringify(errBody, null, 3))
+      res.status(err.statusCode || 500).send(errBody)
     }
   });
 
