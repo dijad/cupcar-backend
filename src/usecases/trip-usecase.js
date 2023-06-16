@@ -1,5 +1,7 @@
 const appRoot = require('app-root-path');
 
+const { createResponse } = require(appRoot + '/src/utils/utils');
+
 const {
   validateNullsInArrayOfData,
   validateAllNullsInArrayOfData } = require(appRoot + '/src/utils/utils');
@@ -11,23 +13,15 @@ async function createTrip(tripRepository, origin = null, destination = null, sea
 
   const payloadTrip = [origin, destination, seats, tripDate, description];
   if (validateNullsInArrayOfData(payloadTrip)) {
-    return {
-      status: false,
-      data: 'Campos de viaje incompletos.'
-    }
+    return createResponse(false, 'Campos de viaje incompletos.');
   }
 
   const trip = await tripRepository.createTrip(origin, destination, seats, description, tripDate, responsibleUser);
 
-  if (trip) return {
-    status: true,
-    data: 'Viaje creado satisfactoriamente.'
+  if (trip) {
+    return createResponse(true, 'Viaje creado satisfactoriamente.');
   }
-
-  return {
-    status: false,
-    data: 'Error al crear el viaje.'
-  }
+  return createResponse(false, 'Error al crear el viaje.');
 }
 
 async function getTripsByAttributes(tripRepository, origin = null, destination = null, seats = null) {
@@ -38,18 +32,12 @@ async function getTripsByAttributes(tripRepository, origin = null, destination =
 
   const payloadTrip = [origin, destination, seats];
   if (validateAllNullsInArrayOfData(payloadTrip)) {
-    return {
-      status: false,
-      data: 'Es necesario al menos un campo de búsqueda.'
-    }
+    return createResponse(false, 'Es necesario al menos un campo de búsqueda.');
   }
 
   const trips = await tripRepository.getTripsByAttributes(origin, destination, Number(seats));
 
-  return {
-    status: true,
-    data: trips
-  }
+  return createResponse(true, trips);
 }
 
 module.exports = {

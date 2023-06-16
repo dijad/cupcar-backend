@@ -28,11 +28,16 @@ function validateAllNullsInArrayOfData(array) {
   return array.every( item => item === null);
 }
 
+function createResponse(status, data) {
+  return { status, data, };
+}
+
 module.exports = {
   encryptString,
   getTypeFailValidationPass,
   matchString,
   generateRandomString,
   validateNullsInArrayOfData,
-  validateAllNullsInArrayOfData
+  validateAllNullsInArrayOfData,
+  createResponse
 };
