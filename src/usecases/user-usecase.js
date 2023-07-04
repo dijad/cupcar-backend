@@ -4,9 +4,8 @@ const ValidatorPass = require(appRoot + '/src/utils/validatorPass');
 const { matchString } = require(appRoot + '/src/utils/utils');
 const { getTypeFailValidationPass, generateRandomString, validateNullsInArrayOfData } = require(appRoot + '/src/utils/utils');
 const { encryptString, createResponse } = require(appRoot + '/src/utils/utils');
-const { EXPIRE_OPTIONS } = require(appRoot + '/src/utils/constants');
 const { isEmail, isPhoneNumber } = require(appRoot + '/src/utils/validator');
-const { signJWT } = require(appRoot + '/src/utils/jwt');
+const { generateAccessToken, generateRefreshToken } = require(appRoot + '/src/utils/jwt');
 const { sendValidationSignUp } = require(appRoot + '/src/usecases/mailing-usecase');
 
 async function signUp(usersRepository, name = null, lastname = null, email, password, gender = null, phone, role) {
@@ -70,15 +69,10 @@ async function login(usersRepository, email, password) {
   }
 
   const isMatched = await matchString(password, user.password);
-  const token = signJWT(
-    {
-      id: user.id,
-      role: user.role
-    },
-    EXPIRE_OPTIONS.oneHour
-  );
+  const accessToken = generateAccessToken({ id: user.id, role: user.role });
+  const refreshToken = generateRefreshToken({ id: user.id, role: user.role});
 
-  return createResponse(isMatched, isMatched ? token : 'Correo o contraseña incorrecta.');
+  return createResponse(isMatched, isMatched ? {accessToken, refreshToken} : 'Correo o contraseña incorrecta.');
 }
 
 async function verifyAccount(usersRepository, secretToken) {

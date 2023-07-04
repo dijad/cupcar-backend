@@ -29,7 +29,7 @@ function validateAllNullsInArrayOfData(array) {
 }
 
 function createResponse(status, data) {
-  return { status, data, };
+  return { status, data };
 }
 
 module.exports = {

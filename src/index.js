@@ -1,8 +1,8 @@
 const createExpressApp = require('./adapters/express');
 
 //Routers
-const SignUpRouterV1 = require('./adapters/routers/v1/clients/sign-up/signUp-router');
-const LoginRouterV1 = require('./adapters/routers/v1/clients/login/login-router');
+const SignUpRouterV1 = require('./adapters/routers/v1/clients/signUp-router');
+const LoginRouterV1 = require('./adapters/routers/v1/clients/login-router');
 const TripRouterV1 = require('./adapters/routers/v1/clients/trip/trip-router');
 const VerifyAccountRouterV1 = require('./adapters/routers/v1/verify-account/verify-account-router');
 

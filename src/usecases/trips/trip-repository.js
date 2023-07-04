@@ -31,8 +31,8 @@ class TripRepository {
       sql = connection.format(sql, params);
       connection.query(sql, function (err, result) {
         if (err) {
-          console.error(UserRepository.name, "failed with ->", JSON.stringify(err))
-          reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
+          console.error(TripRepository.name, "failed with ->", (JSON.stringify(err)))
+          reject(new Error(err.code, 'Se encontró un problema en sistema, contactar a soporte.'))
         } else {
           if (result.length === 0) {
             resolve(null);
@@ -44,7 +44,7 @@ class TripRepository {
     });
   }
 
-  async getTripsByAttributes(origin, destination, seats) {
+  async getTripsByAttributes(origin, destination, seats, dateIn) {
     let self = this;
     return new Promise(function (resolve, reject) {
       let connection = self.getConnection();
@@ -75,10 +75,15 @@ class TripRepository {
         params.push(seats);
         sql += 'AND t.seats >= ?';
       }
+
+      if (dateIn) {
+        params.push(dateIn);
+        sql += ' AND t.trip_date = ?'
+      }
       sql = connection.format(sql, params);
       connection.query(sql, function (err, result) {
         if (err) {
-          console.error(UserRepository.name, "failed with ->", JSON.stringify(err))
+          console.error(TripRepository.name, "failed with ->", JSON.stringify(err))
           reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
         } else {
           if (result.length === 0) {
@@ -92,8 +97,8 @@ class TripRepository {
                 row.destination,
                 row.seats,
                 row.description,
-                row.responsible_user,
-                row.trip_date
+                row.trip_date,
+                row.responsible_user
               );
               trips.push(trip.serialize());
             })

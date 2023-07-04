@@ -16,7 +16,11 @@ const ROLES = {
 
 const EXPIRE_OPTIONS = {
   'oneDay': '1d',
-  'oneHour': '1h'
+  'oneHour': '1h',
+  'tenMin': '10m',
+  'fiveMin': '5min',
+  'oneMin': '1min',
+  'sevenDays': '7d'
 }
 
 module.exports =

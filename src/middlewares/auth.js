@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken');
 const appRoot = require('app-root-path');
+const jwt = require('jsonwebtoken');
+const { createResponse } = require(appRoot + '/src/utils/utils');
 
 const { ROLES } = require(appRoot + '/src/utils/constants')
 
@@ -7,13 +8,8 @@ function verifyToken(req, res, next) {
 
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
-  if (token == null) {
-    return res.status(401).send(
-      {
-        status: false,
-        message: 'Acceso no autorizado, se debe proporcionar un token valido'
-      }
-    );
+  if (!token) {
+    return res.status(401).send(createResponse(false, 'Acceso no autorizado, se debe proporcionar un token valido'));
   }
 
   try {
@@ -22,12 +18,24 @@ function verifyToken(req, res, next) {
     req.role = decodeJWT.role;
     next();
   } catch (error) {
-    return res.status(419).send(
-      {
-        status: false,
-        message: 'Error de autenticación'
+    if (error.name === 'TokenExpiredError') {
+      const refreshToken = req.cookies.refreshToken;
+      if (!refreshToken) {
+        return res.status(401).json(createResponse(false, 'Token de actualización no proporcionado'));
       }
-    );
+      try {
+        const decodeJWT = jwt.verify(refreshToken, process.env.SECRET_KEY_JWT);
+        req.user = decodeJWT.id;
+        req.role = decodeJWT.role;
+        const newAccessToken = jwt.sign({ userId }, secret, { expiresIn: '15m' });
+        res.setHeader('Authorization', newAccessToken);
+        next();
+      } catch (error) {
+        return res.status(401).json(createResponse(false, 'Token de actualziación inválido o expirado'));
+      }
+    } else {
+      return res.status(401).json(createResponse(false, 'Token de acceso inválido'));
+    }
   }
 }
 
@@ -40,12 +48,7 @@ function verifyIsClient(req, res, next) {
       return;
     }
   } catch (error) {
-    return res.status(401).send(
-      {
-        status: false,
-        message: 'Error de autenticación'
-      }
-    );
+    return res.status(401).send(createResponse(false, 'Error de autenticación'));
   }
 }
 
@@ -57,12 +60,7 @@ function verifyIsAdmin(req, res, next) {
       return;
     }
   } catch (error) {
-    return res.status(401).send(
-      {
-        status: false,
-        message: 'Error de autenticación'
-      }
-    );
+    return res.status(401).send(createResponse(false, 'Error de autenticación'));
   }
 }
 

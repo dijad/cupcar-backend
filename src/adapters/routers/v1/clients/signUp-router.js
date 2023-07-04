@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const appRoot = require('app-root-path');
 
-const { ROLES } = require('../../../../../utils/constants');
+const { ROLES } = require(appRoot + '/src/utils/constants');
 
 const { signUp } = require(appRoot + '/src/usecases/user-usecase')
 
@@ -21,9 +21,11 @@ function signUpRouterV1(usersRepository) {
       });
     } catch (err) {
       const errBody = {
-        code: 'failed',
-        message: err.message,
-        url: req.originalUrl
+        status: false,
+        data: {
+         message: err.message,
+         url: req.originalUrl
+        }
       }
       console.error("Backend response ->", JSON.stringify(errBody, null, 3))
       res.status(err.statusCode || 500).send(errBody)

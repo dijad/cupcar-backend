@@ -1,13 +1,20 @@
+const appRoot = require('app-root-path');
+
 const jwt = require("jsonwebtoken");
+const { EXPIRE_OPTIONS } = require(appRoot + '/src/utils/constants');
 
-function signJWT(dataInToken, expireTime) {
-  const token = jwt.sign(
-    dataInToken,
-    process.env.SECRET_KEY_JWT,
-    {
-      expiresIn: expireTime
-    });
-  return token;
-}
+const generateAccessToken = (payload) => {
+  const secret = process.env.SECRET_KEY_JWT;
+  const expiresIn = EXPIRE_OPTIONS.tenMin;
 
-module.exports = { signJWT }
+  return jwt.sign(payload, secret, { expiresIn });
+};
+
+const generateRefreshToken = (payload) => {
+  const secret = process.env.SECRET_KEY_JWT;
+  const expiresIn = EXPIRE_OPTIONS.sevenDays;
+
+  return jwt.sign(payload, secret, { expiresIn });
+};
+
+module.exports = { generateAccessToken, generateRefreshToken }

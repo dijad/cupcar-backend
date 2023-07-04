@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors')
+const cookieParser = require('cookie-parser');
 
 const dotenv = require('dotenv');
 
@@ -16,6 +17,8 @@ async function createExpressApp(routers) {
   app.set('port', process.env.PORT || 3000);
 
   app.use(morgan('dev'));
+
+  app.use(cookieParser());
 
   app.use(cors());
 
