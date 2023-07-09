@@ -46,6 +46,8 @@ function verifyIsClient(req, res, next) {
     if (ROLES_VERIFY.includes(role)) {
       next();
       return;
+    } else {
+      return res.status(401).send(createResponse(false, 'Acceso inválido'));
     }
   } catch (error) {
     return res.status(401).send(createResponse(false, 'Error de autenticación'));
@@ -58,6 +60,8 @@ function verifyIsAdmin(req, res, next) {
     if (role === ROLES.admin) {
       next();
       return;
+    } else {
+      return res.status(401).send(createResponse(false, 'Acceso inválido'));
     }
   } catch (error) {
     return res.status(401).send(createResponse(false, 'Error de autenticación'));

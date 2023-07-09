@@ -1,20 +1,21 @@
 const { Router } = require('express');
 const appRoot = require('app-root-path');
 
-const { verifyAccount } = require(appRoot + '/src/usecases/user-usecase')
+const { getClients } = require(appRoot + '/src/usecases/clients-usecase');
+const { verifyToken, verifyIsAdmin } = require(appRoot + '/src/middlewares/auth');
 
-function verifyAccountRouterV1(usersRepository) {
+function adminsClientsRouterV1(clientsRepository) {
 
   const router = Router();
 
-  router.get('/v1/verify-account', async (req, res) => {
+  router.get('/v1/admins/clients', [verifyToken, verifyIsAdmin], async (req, res) => {
     try {
-      const secretToken = req.query.secretToken;
-      const responseVerifyAccount = await verifyAccount(usersRepository, secretToken);
+
+      const clients = await getClients(clientsRepository);
 
       res.status(200).send({
-        status: responseVerifyAccount.status,
-        data: responseVerifyAccount.data
+        status: clients.status,
+        data: clients.data
       });
     } catch (err) {
       const errBody = {
@@ -32,4 +33,4 @@ function verifyAccountRouterV1(usersRepository) {
   return router;
 }
 
-module.exports = verifyAccountRouterV1;
+module.exports = adminsClientsRouterV1;
