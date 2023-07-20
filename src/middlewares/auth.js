@@ -19,7 +19,7 @@ function verifyToken(req, res, next) {
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
-      const refreshToken = req.cookies.refreshToken;
+      const refreshToken = req.cookies.refresh_token;
       if (!refreshToken) {
         return res.status(401).json(createResponse(false, 'Token de actualización no proporcionado'));
       }
@@ -27,7 +27,7 @@ function verifyToken(req, res, next) {
         const decodeJWT = jwt.verify(refreshToken, process.env.SECRET_KEY_JWT);
         req.user = decodeJWT.id;
         req.role = decodeJWT.role;
-        const newAccessToken = jwt.sign({ userId }, secret, { expiresIn: '15m' });
+        const newAccessToken = jwt.sign({ userId }, secret, { expiresIn: '10m' });
         res.setHeader('Authorization', newAccessToken);
         next();
       } catch (error) {

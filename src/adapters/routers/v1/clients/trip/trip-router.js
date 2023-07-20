@@ -2,7 +2,7 @@ const { Router } = require('express');
 const appRoot = require('app-root-path');
 
 const { createTrip, getTripsByAttributes } = require(appRoot + '/src/usecases/trip-usecase');
-const { verifyToken, verifyIsClient } = require(appRoot + '/src/middlewares/auth')
+const { verifyToken, verifyIsClient } = require(appRoot + '/src/middlewares/auth');
 
 function tripRouterV1(tripRepository) {
 

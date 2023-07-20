@@ -155,6 +155,33 @@ class UserRepository {
       })
     });
   }
+
+  async uploadProfilePhoto(userId, photo) {
+    let self = this;
+    return new Promise(function (resolve, reject) {
+      let connection = self.getConnection();
+      let sql = `
+        UPDATE users u
+        SET u.photo = ?
+        WHERE
+          u.id = ?
+      `;
+      const params = [ JSON.stringify(photo), userId ];
+      sql = connection.format(sql, params);
+      connection.query(sql, function (err, result) {
+        if (err) {
+          console.error(UserRepository.name, "failed with ->", JSON.stringify(err))
+          reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
+        } else {
+          if (result.length === 0) {
+            resolve(null);
+          } else {
+            resolve(true);
+          }
+        }
+      })
+    });
+  }
 }
 
 module.exports = UserRepository;

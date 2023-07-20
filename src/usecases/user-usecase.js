@@ -7,6 +7,9 @@ const { encryptString, createResponse } = require(appRoot + '/src/utils/utils');
 const { isEmail, isPhoneNumber } = require(appRoot + '/src/utils/validator');
 const { generateAccessToken, generateRefreshToken } = require(appRoot + '/src/utils/jwt');
 const { sendValidationSignUp } = require(appRoot + '/src/usecases/mailing-usecase');
+const { uploadImage } = require(appRoot + '/src/frameworks/images-store/cloudinary');
+
+const fs = require('fs-extra');
 
 async function signUp(usersRepository, name = null, lastname = null, email, password, gender = null, phone, role) {
 
@@ -84,8 +87,25 @@ async function verifyAccount(usersRepository, secretToken) {
     return createResponse(false, 'Error verificando cuenta');
   }
 }
+
+async function completeUserProfile(usersRepository, photoPath, userId) {
+  if (photoPath) {
+    const responseCloudinary = await uploadImage(photoPath);
+    const photo = {
+      public_id: responseCloudinary.public_id,
+      secure_url: responseCloudinary.secure_url
+    }
+    await usersRepository.uploadProfilePhoto(userId, photo);
+    await fs.unlink(photoPath);
+    return createResponse(true, 'Perfil completado con éxito.');
+  } else {
+    return createResponse(false, 'Es obligatorio cargar una fotografía del usuario en este paso.');
+  }
+
+}
 module.exports = {
   signUp,
   login,
-  verifyAccount
+  verifyAccount,
+  completeUserProfile
 };

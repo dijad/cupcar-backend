@@ -7,20 +7,16 @@ function loginRouterV1(usersRepository) {
 
   const router = Router();
 
-  router.get('/v1/clients/login', async (req, res) => {
+  router.post('/v1/clients/login', async (req, res) => {
     try {
       const { email, password } = req.body;
 
       const responseLogin = await login(usersRepository, email, password);
 
       if (responseLogin.status) {
-        res.cookie('refreshToken', responseLogin.data.refreshToken, {
-          httpOnly: true,
-          secure: true,
-          sameSite: 'strict',
-        });
-
-        res.status(200).send({
+        res.set('refresh-token', responseLogin.data.refreshToken);
+        res.set('Access-Control-Expose-Headers', 'refresh-token')
+        res.status(200).json({
           status: responseLogin.status,
           data: responseLogin.data.accessToken
         });
