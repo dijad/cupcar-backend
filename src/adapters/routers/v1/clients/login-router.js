@@ -12,13 +12,12 @@ function loginRouterV1(usersRepository) {
       const { email, password } = req.body;
 
       const responseLogin = await login(usersRepository, email, password);
+      console.log("🚀 ~ file: login-router.js:15 ~ router.post ~ responseLogin:", responseLogin)
 
       if (responseLogin.status) {
-        res.set('refresh-token', responseLogin.data.refreshToken);
-        res.set('Access-Control-Expose-Headers', 'refresh-token')
         res.status(200).json({
           status: responseLogin.status,
-          data: responseLogin.data.accessToken
+          data: responseLogin.data
         });
       } else {
         res.status(200).send({

@@ -5,7 +5,7 @@ const { matchString } = require(appRoot + '/src/utils/utils');
 const { getTypeFailValidationPass, generateRandomString, validateNullsInArrayOfData } = require(appRoot + '/src/utils/utils');
 const { encryptString, createResponse } = require(appRoot + '/src/utils/utils');
 const { isEmail, isPhoneNumber } = require(appRoot + '/src/utils/validator');
-const { generateAccessToken, generateRefreshToken } = require(appRoot + '/src/utils/jwt');
+const { generateAccessToken } = require(appRoot + '/src/utils/jwt');
 const { sendValidationSignUp } = require(appRoot + '/src/usecases/mailing-usecase');
 const { uploadImage } = require(appRoot + '/src/frameworks/images-store/cloudinary');
 
@@ -73,9 +73,8 @@ async function login(usersRepository, email, password) {
 
   const isMatched = await matchString(password, user.password);
   const accessToken = generateAccessToken({ id: user.id, role: user.role });
-  const refreshToken = generateRefreshToken({ id: user.id, role: user.role});
 
-  return createResponse(isMatched, isMatched ? {accessToken, refreshToken} : 'Correo o contraseña incorrecta.');
+  return createResponse(isMatched, isMatched ? accessToken : 'Correo o contraseña incorrecta.');
 }
 
 async function verifyAccount(usersRepository, secretToken) {

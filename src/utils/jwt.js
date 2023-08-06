@@ -5,16 +5,9 @@ const { EXPIRE_OPTIONS } = require(appRoot + '/src/utils/constants');
 
 const generateAccessToken = (payload) => {
   const secret = process.env.SECRET_KEY_JWT;
-  const expiresIn = EXPIRE_OPTIONS.tenMin;
-
-  return jwt.sign(payload, secret, { expiresIn });
-};
-
-const generateRefreshToken = (payload) => {
-  const secret = process.env.SECRET_KEY_JWT;
   const expiresIn = EXPIRE_OPTIONS.sevenDays;
 
   return jwt.sign(payload, secret, { expiresIn });
 };
 
-module.exports = { generateAccessToken, generateRefreshToken }
+module.exports = { generateAccessToken }

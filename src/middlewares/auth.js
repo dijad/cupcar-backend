@@ -18,24 +18,7 @@ function verifyToken(req, res, next) {
     req.role = decodeJWT.role;
     next();
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      const refreshToken = req.cookies.refresh_token;
-      if (!refreshToken) {
-        return res.status(401).json(createResponse(false, 'Token de actualización no proporcionado'));
-      }
-      try {
-        const decodeJWT = jwt.verify(refreshToken, process.env.SECRET_KEY_JWT);
-        req.user = decodeJWT.id;
-        req.role = decodeJWT.role;
-        const newAccessToken = jwt.sign({ userId }, secret, { expiresIn: '10m' });
-        res.setHeader('Authorization', newAccessToken);
-        next();
-      } catch (error) {
-        return res.status(401).json(createResponse(false, 'Token de actualziación inválido o expirado'));
-      }
-    } else {
-      return res.status(401).json(createResponse(false, 'Token de acceso inválido'));
-    }
+    return res.status(401).json(createResponse(false, 'Token de acceso inválido'));
   }
 }
 

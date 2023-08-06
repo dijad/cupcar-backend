@@ -10,7 +10,7 @@ function completeUserProfileRouterV1(usersRepository) {
 
   const router = Router();
 
-  router.put('/v1/clients/profile', [ //poner foto de perfil
+  router.put('/v1/clients/profile', [ verifyToken, verifyIsClient,
     fileUpload({
       useTempFiles : true,
       tempFileDir : './uploads'
