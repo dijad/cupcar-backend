@@ -1,8 +1,7 @@
 const { Router } = require('express');
-const appRoot = require('app-root-path');
 
-const { verifyToken, verifyIsClient } = require(appRoot + '/src/middlewares/auth');
-const { completeUserProfile } = require(appRoot + '/src/usecases/user-usecase');
+const { verifyToken, verifyIsClient } = require('../../../../middlewares/auth');
+const { completeUserProfile } = require('../../../../usecases/user-usecase');
 
 const fileUpload = require('express-fileupload');
 

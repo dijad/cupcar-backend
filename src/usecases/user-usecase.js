@@ -1,13 +1,8 @@
-const appRoot = require('app-root-path');
-
-const ValidatorPass = require(appRoot + '/src/utils/validatorPass');
-const { matchString } = require(appRoot + '/src/utils/utils');
-const { getTypeFailValidationPass, generateRandomString, validateNullsInArrayOfData } = require(appRoot + '/src/utils/utils');
-const { encryptString, createResponse } = require(appRoot + '/src/utils/utils');
-const { isEmail, isPhoneNumber } = require(appRoot + '/src/utils/validator');
-const { generateAccessToken } = require(appRoot + '/src/utils/jwt');
-const { sendValidationSignUp } = require(appRoot + '/src/usecases/mailing-usecase');
-const { uploadImage } = require(appRoot + '/src/frameworks/images-store/cloudinary');
+const { matchString, getTypeFailValidationPass, generateRandomString, validateNullsInArrayOfData, encryptString, createResponse } = require('../utils/utils');
+const { isEmail, isPhoneNumber } = require('../utils/validator');
+const { generateAccessToken } = require('../utils/jwt');
+const { sendValidationSignUp } = require('../usecases/mailing-usecase');
+const { uploadImage } = require('../frameworks/images-store/cloudinary');
 
 const fs = require('fs-extra');
 

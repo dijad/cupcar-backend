@@ -1,6 +1,4 @@
-const appRoot = require('app-root-path');
-
-const ClientEntity = require(appRoot + '/src/usecases/clients/clients-entity');
+const ClientEntity = require('./clients-entity');
 
 class ClientsRepository {
 

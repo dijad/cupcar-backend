@@ -1,6 +1,4 @@
-const appRoot = require('app-root-path');
-
-const TripEntity = require(appRoot + '/src/usecases/trips/trip-entity');
+const TripEntity = require('./trip-entity');
 
 class TripRepository {
 

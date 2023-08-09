@@ -1,6 +1,4 @@
-const appRoot = require('app-root-path');
-
-const { createResponse } = require(appRoot + '/src/utils/utils');
+const { createResponse } = require('../utils/utils');
 
 async function getClients(clientsRepository) {
   try {

@@ -1,6 +1,4 @@
-const appRoot = require('app-root-path');
-const { initMailer } = require(appRoot + '/src/frameworks/mailing/sendgrid');
-
+const { initMailer } = require('../frameworks/mailing/sendgrid');
 
 async function sendMail(emailTo, subject, text, html) {
   const mailer = initMailer();

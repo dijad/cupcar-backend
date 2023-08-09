@@ -1,8 +1,7 @@
-const appRoot = require('app-root-path');
 const jwt = require('jsonwebtoken');
-const { createResponse } = require(appRoot + '/src/utils/utils');
+const { createResponse } = require('../utils/utils');
 
-const { ROLES } = require(appRoot + '/src/utils/constants')
+const { ROLES } = require('../utils/constants');
 
 function verifyToken(req, res, next) {
 

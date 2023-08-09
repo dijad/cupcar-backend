@@ -1,9 +1,8 @@
 const { Router } = require('express');
-const appRoot = require('app-root-path');
 
-const { ROLES } = require(appRoot + '/src/utils/constants');
+const { ROLES } = require('../../../../utils/constants');
 
-const { signUp } = require(appRoot + '/src/usecases/user-usecase')
+const { signUp } = require('../../../../usecases/user-usecase');
 
 function signUpRouterV1(usersRepository) {
 

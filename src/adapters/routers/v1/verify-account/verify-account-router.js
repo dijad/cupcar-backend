@@ -1,7 +1,6 @@
 const { Router } = require('express');
-const appRoot = require('app-root-path');
 
-const { verifyAccount } = require(appRoot + '/src/usecases/user-usecase')
+const { verifyAccount } = require('../../../../usecases/user-usecase')
 
 function verifyAccountRouterV1(usersRepository) {
 

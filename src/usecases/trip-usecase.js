@@ -1,10 +1,4 @@
-const appRoot = require('app-root-path');
-
-const { createResponse } = require(appRoot + '/src/utils/utils');
-
-const {
-  validateNullsInArrayOfData,
-  validateAllNullsInArrayOfData } = require(appRoot + '/src/utils/utils');
+const { createResponse, validateNullsInArrayOfData, validateAllNullsInArrayOfData } = require('../utils/utils');
 
 async function createTrip(tripRepository, origin = null, destination = null, seats = null, description = null, tripDate = null, responsibleUser) {
 

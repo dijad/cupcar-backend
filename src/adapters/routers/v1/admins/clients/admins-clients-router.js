@@ -1,8 +1,7 @@
 const { Router } = require('express');
-const appRoot = require('app-root-path');
 
-const { getClients } = require(appRoot + '/src/usecases/clients-usecase');
-const { verifyToken, verifyIsAdmin } = require(appRoot + '/src/middlewares/auth');
+const { getClients } = require('../../../../../usecases/clients-usecase');
+const { verifyToken, verifyIsAdmin } = require('../../../../../middlewares/auth');
 
 function adminsClientsRouterV1(clientsRepository) {
 

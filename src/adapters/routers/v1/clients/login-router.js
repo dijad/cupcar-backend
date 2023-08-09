@@ -1,7 +1,6 @@
 const { Router } = require('express');
-const appRoot = require('app-root-path');
 
-const { login } = require(appRoot + '/src/usecases/user-usecase')
+const { login } = require('../../../../usecases/user-usecase')
 
 function loginRouterV1(usersRepository) {
 

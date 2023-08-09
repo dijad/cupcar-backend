@@ -1,7 +1,5 @@
-const appRoot = require('app-root-path');
-
 const jwt = require("jsonwebtoken");
-const { EXPIRE_OPTIONS } = require(appRoot + '/src/utils/constants');
+const { EXPIRE_OPTIONS } = require('./constants');
 
 const generateAccessToken = (payload) => {
   const secret = process.env.SECRET_KEY_JWT;
