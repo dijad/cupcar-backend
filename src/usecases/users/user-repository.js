@@ -82,7 +82,8 @@ class UserRepository {
               result.rows[0].phone,
               result.rows[0].is_active,
               result.rows[0].gender,
-              result.rows[0].token
+              result.rows[0].token,
+              result.rows[0].role
             );
             resolve(user);
           }
@@ -156,7 +157,7 @@ class UserRepository {
         UPDATE users
         SET photo = $1
         WHERE
-          u.id = $2
+          id = $2
       `;
       const params = [ JSON.stringify(photo), userId ];
       connection.query(sql, params, function (err, result) {
