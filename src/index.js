@@ -9,17 +9,16 @@ const AdminsClientsRouterV1 = require('./adapters/routers/v1/admins/clients/admi
 const CompleteUserProfileV1 = require('./adapters/routers/v1/clients/complete-user-profile-router');
 
 //Frameworks
-const mysqlConnection = require('./frameworks/db/mysql');
-
+const postgresConnection = require('./frameworks/db/postgres');
 //Repositorios
 const UsersRepository = require('./usecases/users/user-repository');
 const TripsRepository = require('./usecases/trips/trip-repository');
 const ClientsRepository = require('./usecases/clients/clients-repository');
 
 //Instanciar repositorios
-const usersRepository = new UsersRepository(mysqlConnection);
-const tripsRepository = new TripsRepository(mysqlConnection);
-const clientsRepository = new ClientsRepository(mysqlConnection);
+const usersRepository = new UsersRepository(postgresConnection);
+const tripsRepository = new TripsRepository(postgresConnection);
+const clientsRepository = new ClientsRepository(postgresConnection);
 
 let routers = [
   SignUpRouterV1(usersRepository),

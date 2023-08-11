@@ -2,8 +2,8 @@ const ClientEntity = require('./clients-entity');
 
 class ClientsRepository {
 
-  constructor(mysqlClient) {
-    this.connection = mysqlClient;
+  constructor(dbClient) {
+    this.connection = dbClient;
   }
 
   getConnection() {

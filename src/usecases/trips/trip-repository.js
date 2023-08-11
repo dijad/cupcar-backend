@@ -2,8 +2,8 @@ const TripEntity = require('./trip-entity');
 
 class TripRepository {
 
-   constructor(mysqlClient) {
-    this.connection = mysqlClient;
+   constructor(dbClient) {
+    this.connection = dbClient;
   }
 
   getConnection() {

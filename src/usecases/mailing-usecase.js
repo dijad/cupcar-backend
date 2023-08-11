@@ -17,8 +17,8 @@ async function sendMail(emailTo, subject, text, html) {
 }
 
 async function sendValidationSignUp(userMail, token) {
-    const subject = `Verificación de cuenta BigRoads`;
-    const text = `Gracias por registrarte en BigRoads. Para validar tu cuenta, ingresa al siguiente enlace: ${process.env.URL_BASE}/v1/verify-account?secretToken=${token}`;
+    const subject = `Verificación de cuenta CupCar`;
+    const text = `Gracias por registrarte en CupCar. Para validar tu cuenta, ingresa al siguiente enlace: ${process.env.URL_BASE}/v1/verify-account?secretToken=${token}`;
     const html = text;
     await sendMail(userMail, subject, text, html);
 }

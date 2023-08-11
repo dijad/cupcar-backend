@@ -1,4 +1,5 @@
 const { matchString, getTypeFailValidationPass, generateRandomString, validateNullsInArrayOfData, encryptString, createResponse } = require('../utils/utils');
+const ValidatorPass = require('../utils/validatorPass');
 const { isEmail, isPhoneNumber } = require('../utils/validator');
 const { generateAccessToken } = require('../utils/jwt');
 const { sendValidationSignUp } = require('../usecases/mailing-usecase');
@@ -19,6 +20,7 @@ async function signUp(usersRepository, name = null, lastname = null, email, pass
   }
 
   const user = await usersRepository.getUserByEmail(email);
+
   if (user) {
     return createResponse(false, 'Esta dirección de correo electrónico ya se encuentra en uso.');
   }
@@ -43,7 +45,6 @@ async function signUp(usersRepository, name = null, lastname = null, email, pass
     password: await encryptString(password),
     token,
   };
-
   const responseSignUp = await usersRepository.signUp(newUser);
   sendValidationSignUp(newUser.email, token);
 
@@ -74,13 +75,18 @@ async function login(usersRepository, email, password) {
 
 async function verifyAccount(usersRepository, secretToken) {
   const user = await usersRepository.getUserBySecretToken(secretToken);
-  if (user) {
-    await usersRepository.verifyAccount(user.id);
-    return createResponse(true, 'Cuenta verificada.');
-  } else {
+
+  if (!user) {
     return createResponse(false, 'Error verificando cuenta');
   }
+
+  const successMessage = 'Cuenta verificada.';
+  const errorMessage = 'Error verificando cuenta';
+  const res = await usersRepository.verifyAccount(user.id);
+
+  return createResponse(res, res ? successMessage : errorMessage);
 }
+
 
 async function completeUserProfile(usersRepository, photoPath, userId) {
   if (photoPath) {

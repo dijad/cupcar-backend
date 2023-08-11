@@ -2,8 +2,8 @@ const UserEntity = require('./user-entity');
 
 class UserRepository {
 
-  constructor(mysqlClient) {
-    this.connection = mysqlClient;
+  constructor(dbClient) {
+    this.connection = dbClient;
   }
 
   getConnection() {
@@ -16,7 +16,7 @@ class UserRepository {
       let connection = self.getConnection();
       let sql = `
         INSERT INTO users (name, last_name, phone, role, gender, email, password, token)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
       `;
       const params = [
         user.name,
@@ -28,14 +28,13 @@ class UserRepository {
         user.password,
         user.token
       ];
-      sql = connection.format(sql, params);
-      connection.query(sql, function (err, result) {
+      connection.query(sql, params, function (err, result) {
         if (err) {
           console.error(UserRepository.name, "failed with ->", JSON.stringify(err))
           reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
         } else {
-          if (result.length === 0) {
-            resolve(null);
+          if (result.rowCount < 1) {
+            resolve(false);
           } else {
             resolve(true);
           }
@@ -63,34 +62,21 @@ class UserRepository {
         FROM
           users u
         WHERE
-          u.email = ?
+          u.email = $1
       `;
       const params = [ email ];
-      sql = connection.format(sql, params);
-      connection.query(sql, function (err, result) {
+      connection.query(sql, params, function (err, result) {
         if (err) {
           console.error(UserRepository.name, "failed with ->", JSON.stringify(err))
           reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
         } else {
-          if (result.length === 0) {
+          if (result.rows.length === 0) {
             resolve(null);
           } else {
-            const user = new UserEntity(
-              result[0].id,
-              result[0].name,
-              result[0].last_name,
-              result[0].email,
-              result[0].password,
-              result[0].phone,
-              result[0].is_active,
-              result[0].gender,
-              result[0].token,
-              result[0].role,
-            )
-            resolve(user.serialize());
+            resolve(true);
           }
         }
-      })
+      });
     });
   }
 
@@ -105,20 +91,19 @@ class UserRepository {
         FROM
           users u
         WHERE
-          u.token = ?
+          u.token = $1
       `;
       const params = [ token ];
-      sql = connection.format(sql, params);
-      connection.query(sql, function (err, result) {
+      connection.query(sql, params, function (err, result) {
         if (err) {
           console.error(UserRepository.name, "failed with ->", JSON.stringify(err))
           reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
         } else {
-          if (result.length === 0) {
+          if (result.rows.length === 0) {
             resolve(null);
           } else {
             const user = new UserEntity(
-              result[0].id,
+              result.rows[0].id,
             )
             resolve(user.serialize());
           }
@@ -132,20 +117,18 @@ class UserRepository {
     return new Promise(function (resolve, reject) {
       let connection = self.getConnection();
       let sql = `
-        UPDATE users u
-        SET u.is_active = true
-        WHERE
-          u.id = ?
+        UPDATE users
+        SET is_active = true
+        WHERE id = $1
       `;
       const params = [ userId ];
-      sql = connection.format(sql, params);
-      connection.query(sql, function (err, result) {
+      connection.query(sql, params, function (err, result) {
         if (err) {
           console.error(UserRepository.name, "failed with ->", JSON.stringify(err))
           reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
         } else {
-          if (result.length === 0) {
-            resolve(null);
+          if (result.rowCount < 1) {
+            resolve(false);
           } else {
             resolve(true);
           }
@@ -159,20 +142,19 @@ class UserRepository {
     return new Promise(function (resolve, reject) {
       let connection = self.getConnection();
       let sql = `
-        UPDATE users u
-        SET u.photo = ?
+        UPDATE users
+        SET photo = $1
         WHERE
-          u.id = ?
+          u.id = $2
       `;
       const params = [ JSON.stringify(photo), userId ];
-      sql = connection.format(sql, params);
-      connection.query(sql, function (err, result) {
+      connection.query(sql, params, function (err, result) {
         if (err) {
           console.error(UserRepository.name, "failed with ->", JSON.stringify(err))
           reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
         } else {
-          if (result.length === 0) {
-            resolve(null);
+          if (result.rowCount < 1) {
+            resolve(false);
           } else {
             resolve(true);
           }
