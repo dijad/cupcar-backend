@@ -59,6 +59,7 @@ async function login(usersRepository, email, password) {
   }
 
   const user = await usersRepository.getUserByEmail(email);
+
   if (!user) {
     return createResponse(false, 'Esta dirección de correo electrónico no está asociada a una cuenta.');
   }

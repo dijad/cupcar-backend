@@ -73,7 +73,18 @@ class UserRepository {
           if (result.rows.length === 0) {
             resolve(null);
           } else {
-            resolve(true);
+            const user = new UserEntity(
+              result.rows[0].id,
+              result.rows[0].name,
+              result.rows[0].last_name,
+              result.rows[0].email,
+              result.rows[0].password,
+              result.rows[0].phone,
+              result.rows[0].is_active,
+              result.rows[0].gender,
+              result.rows[0].token
+            );
+            resolve(user);
           }
         }
       });
