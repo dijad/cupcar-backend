@@ -1,0 +1,51 @@
+const PlaceEntity = require('./places-entity');
+
+class PlacesRepository {
+
+  constructor(dbClient) {
+    this.connection = dbClient;
+  }
+
+  getConnection() {
+    return this.connection();
+  }
+
+  async getPlaces() {
+    let self = this;
+    return new Promise(function (resolve, reject) {
+      let connection = self.getConnection();
+      let params = [];
+      let sql = `
+        SELECT
+          *
+        FROM
+          places p
+      `;
+      connection.query(sql, params, function (err, result) {
+        if (err) {
+          console.error(ClientsRepository.name, "failed with ->", JSON.stringify(err))
+          reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
+        } else {
+          if (result.rows.length === 0) {
+            resolve([]);
+          } else {
+            let places = [];
+            result.rows.map(row => {
+              const place = new PlaceEntity(
+                row.id,
+                row.department_dane_code,
+                row.department_name,
+                row.city_dane_code,
+                row.city_name,
+              );
+              places.push(place.serialize());
+            })
+            resolve(places);
+          }
+        }
+      })
+    });
+  }
+}
+
+module.exports = PlacesRepository;

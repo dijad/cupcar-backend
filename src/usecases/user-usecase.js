@@ -88,7 +88,6 @@ async function verifyAccount(usersRepository, secretToken) {
   return createResponse(res, res ? successMessage : errorMessage);
 }
 
-
 async function completeUserProfile(usersRepository, photoPath, userId) {
   if (photoPath) {
     const responseCloudinary = await uploadImage(photoPath);
