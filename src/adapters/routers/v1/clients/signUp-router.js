@@ -10,9 +10,9 @@ function signUpRouterV1(usersRepository) {
 
   router.post('/v1/clients/sign-up', async (req, res) => {
     try {
-      const { name, lastname, email, password, gender, phone } = req.body;
+      const { name, lastname, email, password, gender, phone, favoriteOrigins } = req.body;
 
-      const reponseSignUp = await signUp(usersRepository, name, lastname, email, password, gender, phone, ROLES.client);
+      const reponseSignUp = await signUp(usersRepository, name, lastname, email, password, gender, phone, ROLES.client, favoriteOrigins);
 
       res.status(200).send({
         status: reponseSignUp.status,

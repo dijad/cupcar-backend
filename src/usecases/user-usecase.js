@@ -7,9 +7,9 @@ const { uploadImage } = require('../frameworks/images-store/cloudinary');
 
 const fs = require('fs-extra');
 
-async function signUp(usersRepository, name = null, lastname = null, email, password, gender = null, phone, role) {
+async function signUp(usersRepository, name = null, lastname = null, email, password, gender = null, phone, role, favoriteOrigins) {
 
-  const payloadSignUp = [name, lastname, gender];
+  const payloadSignUp = [name, lastname, gender, favoriteOrigins];
 
   if (validateNullsInArrayOfData(payloadSignUp)) {
     return createResponse(false, 'Campos de registro incompletos.');
@@ -44,6 +44,7 @@ async function signUp(usersRepository, name = null, lastname = null, email, pass
     email,
     password: await encryptString(password),
     token,
+    favoriteOrigins
   };
   const responseSignUp = await usersRepository.signUp(newUser);
   sendValidationSignUp(newUser.email, token);

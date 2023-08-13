@@ -14,21 +14,24 @@ class UserRepository {
     let self = this;
     return new Promise(function (resolve, reject) {
       let connection = self.getConnection();
-      let sql = `
-        INSERT INTO users (name, last_name, phone, role, gender, email, password, token)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
-      `;
-      const params = [
-        user.name,
-        user.lastname,
-        user.phone,
-        user.role,
-        user.gender,
-        user.email,
-        user.password,
-        user.token
-      ];
-      connection.query(sql, params, function (err, result) {
+      let query = {
+        text: `
+          INSERT INTO users (name, last_name, phone, role, gender, email, password, token, favorite_origins)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
+         `,
+        values: [
+          user.name,
+          user.lastname,
+          user.phone,
+          user.role,
+          user.gender,
+          user.email,
+          user.password,
+          user.token,
+          user.favoriteOrigins
+          ]
+       }
+      connection.query(query, function (err, result) {
         if (err) {
           console.error(UserRepository.name, "failed with ->", JSON.stringify(err))
           reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))

@@ -71,7 +71,8 @@ class ClientsRepository {
           u.phone,
           u.is_active,
           u.gender,
-          u.photo
+          u.photo,
+          u.favorite_origins
         FROM
           users u
         WHERE
@@ -93,7 +94,8 @@ class ClientsRepository {
                 result.rows[0].phone,
                 result.rows[0].is_active,
                 result.rows[0].gender,
-                result.rows[0].photo
+                result.rows[0].photo,
+                result.rows[0].favorite_origins
               );
             resolve(client.serialize());
           }

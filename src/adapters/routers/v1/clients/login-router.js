@@ -11,7 +11,6 @@ function loginRouterV1(usersRepository) {
       const { email, password } = req.body;
 
       const responseLogin = await login(usersRepository, email, password);
-      console.log("🚀 ~ file: login-router.js:15 ~ router.post ~ responseLogin:", responseLogin)
 
       if (responseLogin.status) {
         res.status(200).json({
