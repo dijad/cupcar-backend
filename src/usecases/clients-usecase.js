@@ -9,4 +9,14 @@ async function getClients(clientsRepository) {
   }
 }
 
-module.exports = { getClients };
+async function getProfile(clientsRepository, clientId) {
+  try {
+    const client = await clientsRepository.getProfile(clientId);
+    return createResponse(true, client);
+  }catch(error){
+    throw new Error(error.message);
+  }
+
+}
+
+module.exports = { getClients, getProfile };
