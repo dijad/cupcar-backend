@@ -3,7 +3,7 @@ const ValidatorPass = require('../utils/validatorPass');
 const { isEmail, isPhoneNumber } = require('../utils/validator');
 const { generateAccessToken } = require('../utils/jwt');
 const { sendValidationSignUp } = require('../usecases/mailing-usecase');
-const { uploadImage } = require('../frameworks/images-store/cloudinary');
+const { uploadImage, deleteImage } = require('../frameworks/images-store/cloudinary');
 
 const fs = require('fs-extra');
 
@@ -91,14 +91,18 @@ async function verifyAccount(usersRepository, secretToken) {
 
 async function completeUserProfile(usersRepository, photoPath, userId) {
   if (photoPath) {
-    const responseCloudinary = await uploadImage(photoPath);
+    const user = await usersRepository.getUserById(userId);
+    const responseCloudinaryUpload = await uploadImage(photoPath);
     const photo = {
-      public_id: responseCloudinary.public_id,
-      secure_url: responseCloudinary.secure_url
+      public_id: responseCloudinaryUpload.public_id,
+      secure_url: responseCloudinaryUpload.secure_url
+    }
+    if (user.photo) {
+      await deleteImage(user.photo.public_id);
     }
     await usersRepository.uploadProfilePhoto(userId, photo);
     await fs.unlink(photoPath);
-    return createResponse(true, 'Perfil completado con éxito.');
+    return createResponse(true, 'Foto actualizada con éxito.');
   } else {
     return createResponse(false, 'Es obligatorio cargar una fotografía del usuario en este paso.');
   }

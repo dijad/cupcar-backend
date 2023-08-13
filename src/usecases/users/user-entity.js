@@ -1,6 +1,6 @@
 class UserEntity {
 
-  constructor(id, name, lastname, email, password, phone, active, gender, token, role) {
+  constructor(id, name, lastname, email, password, phone, active, gender, token, role, photo) {
     this.id = id;
     this.name = name;
     this.lastname = lastname;
@@ -11,6 +11,7 @@ class UserEntity {
     this.gender = gender;
     this.token = token;
     this.role = role;
+    this.photo = photo
   }
 
   serialize() {
@@ -24,7 +25,8 @@ class UserEntity {
       active: this.active,
       gender: this.gender,
       token: this.token,
-      role: this.role
+      role: this.role,
+      photo: this.photo
     }
   }
 }
