@@ -10,16 +10,19 @@ class PlacesRepository {
     return this.connection();
   }
 
-  async getPlaces() {
+  async getDepartments() {
     let self = this;
     return new Promise(function (resolve, reject) {
       let connection = self.getConnection();
       let params = [];
       let sql = `
-        SELECT
-          *
-        FROM
+        select
+          distinct p.department_name,
+          p.department_dane_code
+        from
           places p
+        order by
+          1;
       `;
       connection.query(sql, params, function (err, result) {
         if (err) {

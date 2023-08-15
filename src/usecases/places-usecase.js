@@ -1,12 +1,21 @@
 const { createResponse } = require('../utils/utils');
 
-async function getPlaces(placesRepository) {
+async function getDepartments(placesRepository) {
   try {
-    const places = await placesRepository.getPlaces();
-    return createResponse(true, places);
+    const departments = await placesRepository.getDepartments();
+    return createResponse(true, departments);
   }catch(error){
     throw new Error(error.message);
   }
 }
 
-module.exports = { getPlaces };
+async function getCitiesByDepartments(placesRepository, departmentId) {
+  try {
+    const cities = await placesRepository.getCitiesByDepartments(departmentId);
+    return createResponse(true, cities);
+  }catch(error){
+    throw new Error(error.message);
+  }
+}
+
+module.exports = { getDepartments, getCitiesByDepartments };
