@@ -9,13 +9,13 @@ async function getDepartments(placesRepository) {
   }
 }
 
-async function getCitiesByDepartments(placesRepository, departmentId) {
+async function getCitiesByDepartmentDaneCode(placesRepository, departmentDaneCode) {
   try {
-    const cities = await placesRepository.getCitiesByDepartments(departmentId);
+    const cities = await placesRepository.getCitiesByDepartmentDaneCode(departmentDaneCode);
     return createResponse(true, cities);
   }catch(error){
     throw new Error(error.message);
   }
 }
 
-module.exports = { getDepartments, getCitiesByDepartments };
+module.exports = { getDepartments, getCitiesByDepartmentDaneCode };

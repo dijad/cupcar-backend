@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { getDepartments } = require('../../../../usecases/places-usecase');
+const { getDepartments, getCitiesByDepartmentDaneCode } = require('../../../../usecases/places-usecase');
 
 function placeRouterV1(placeRepository) {
 
@@ -28,11 +28,11 @@ function placeRouterV1(placeRepository) {
     }
   });
 
-  router.get('/v1/departments/:department_id/cities' ,async (req, res) => {
+  router.get('/v1/departments/:department_dane_code/cities' ,async (req, res) => {
     try {
 
-      const departmentId = Number(req.params.country_id);
-      const responsePlaces = await getCitiesByDepartments(placeRepository, departmentId);
+      const departmentDaneCode = Number(req.params.department_dane_code);
+      const responsePlaces = await getCitiesByDepartmentDaneCode(placeRepository, departmentDaneCode);
 
       res.status(200).send({
         status: responsePlaces.status,
