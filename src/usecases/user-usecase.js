@@ -1,4 +1,4 @@
-const { matchString, getTypeFailValidationPass, generateRandomString, validateNullsInArrayOfData, encryptString, createResponse } = require('../utils/utils');
+const { matchString, getTypeFailValidationPass, generateRandomString, validateNullsInArrayOfDataSignUp, encryptString, createResponse } = require('../utils/utils');
 const ValidatorPass = require('../utils/validatorPass');
 const { isEmail, isPhoneNumber } = require('../utils/validator');
 const { generateAccessToken } = require('../utils/jwt');
@@ -11,7 +11,7 @@ async function signUp(usersRepository, name = null, lastname = null, email, pass
 
   const payloadSignUp = [name, lastname, gender, favoriteOrigins];
 
-  if (validateNullsInArrayOfData(payloadSignUp)) {
+  if (validateNullsInArrayOfDataSignUp(payloadSignUp)) {
     return createResponse(false, 'Campos de registro incompletos.');
   }
 

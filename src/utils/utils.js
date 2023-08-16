@@ -20,12 +20,19 @@ function generateRandomString () {
   return Math.floor(Math.random() * Date.now()).toString(36);
 }
 
-function validateNullsInArrayOfData(array) {
+function validateNullsInArrayOfDataSignUp(array) {
   if (array.every((campo) => campo !== null)) {
     // Verificar que el campo de array tenga al menos un elemento
     if (Array.isArray(array[array.length - 1]) && array[array.length - 1].length > 0) {
       return false;
     }
+  }
+  return true;
+}
+
+function validateNullsInArrayOfData(array) {
+  if (array.every((campo) => campo !== null)) {
+    return false;
   }
   return true;
 }
@@ -43,6 +50,7 @@ module.exports = {
   getTypeFailValidationPass,
   matchString,
   generateRandomString,
+  validateNullsInArrayOfDataSignUp,
   validateNullsInArrayOfData,
   validateAllNullsInArrayOfData,
   createResponse

@@ -16,7 +16,7 @@ class TripRepository {
       let connection = self.getConnection();
       let sql = `
         INSERT INTO trips (origin, destination, seats, description, trip_date, responsible_user)
-        VALUES (?, ?, ?, ?, ?, ?);
+        VALUES ($1, $2, $3, $4, $5, $6);
       `;
       const params = [
         origin,
@@ -26,14 +26,13 @@ class TripRepository {
         tripDate,
         responsibleUser
       ];
-      sql = connection.format(sql, params);
-      connection.query(sql, function (err, result) {
+      connection.query(sql, params, function (err, result) {
         if (err) {
           console.error(TripRepository.name, "failed with ->", (JSON.stringify(err)))
-          reject(new Error(err.code, 'Se encontró un problema en sistema, contactar a soporte.'))
+          reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
         } else {
-          if (result.length === 0) {
-            resolve(null);
+          if (result.rowCount < 1) {
+            resolve(false);
           } else {
             resolve(true);
           }

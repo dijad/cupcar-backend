@@ -31,8 +31,9 @@ function placeRouterV1(placeRepository) {
   router.get('/v1/departments/:department_dane_code/cities' ,async (req, res) => {
     try {
 
+      const searchText = req.query.search;
       const departmentDaneCode = Number(req.params.department_dane_code);
-      const responsePlaces = await getCitiesByDepartmentDaneCode(placeRepository, departmentDaneCode);
+      const responsePlaces = await getCitiesByDepartmentDaneCode(placeRepository, departmentDaneCode, searchText);
 
       res.status(200).send({
         status: responsePlaces.status,

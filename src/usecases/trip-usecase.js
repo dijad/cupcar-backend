@@ -10,7 +10,7 @@ async function createTrip(tripRepository, origin = null, destination = null, sea
     if (validateNullsInArrayOfData(payloadTrip)) {
       return createResponse(false, 'Campos de viaje incompletos.');
     }
-
+    //TODO validar que el viaje no exista
     const trip = await tripRepository.createTrip(origin, destination, seats, description, tripDate, responsibleUser);
 
     if (trip) {

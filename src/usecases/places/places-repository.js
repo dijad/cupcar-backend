@@ -26,7 +26,7 @@ class PlacesRepository {
       `;
       connection.query(sql, params, function (err, result) {
         if (err) {
-          console.error(ClientsRepository.name, "failed with ->", JSON.stringify(err))
+          console.error(PlacesRepository.name, "failed with ->", JSON.stringify(err))
           reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
         } else {
           if (result.rows.length === 0) {
@@ -50,11 +50,16 @@ class PlacesRepository {
     });
   }
 
-  async getCitiesByDepartmentDaneCode(departmentDaneCode) {
+  async getCitiesByDepartmentDaneCode(departmentDaneCode, searchText) {
     let self = this;
     return new Promise(function (resolve, reject) {
       let connection = self.getConnection();
       let params = [departmentDaneCode];
+      let filterSearchBy = '';
+      if (searchText) {
+        filterSearchBy = `and unaccent(LOWER(p.city_name)) ilike '%' || unaccent($2) || '%'`;
+        params.push(searchText.toLowerCase());
+      }
       let sql = `
         select
           *
@@ -62,11 +67,12 @@ class PlacesRepository {
           places p
         where
           p.department_dane_code = $1
+        ${filterSearchBy}
         order by 5;
       `;
       connection.query(sql, params, function (err, result) {
         if (err) {
-          console.error(ClientsRepository.name, "failed with ->", JSON.stringify(err))
+          console.error(PlacesRepository.name, "failed with ->", JSON.stringify(err))
           reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
         } else {
           if (result.rows.length === 0) {

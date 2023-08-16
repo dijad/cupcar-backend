@@ -9,9 +9,9 @@ async function getDepartments(placesRepository) {
   }
 }
 
-async function getCitiesByDepartmentDaneCode(placesRepository, departmentDaneCode) {
+async function getCitiesByDepartmentDaneCode(placesRepository, departmentDaneCode, searchText) {
   try {
-    const cities = await placesRepository.getCitiesByDepartmentDaneCode(departmentDaneCode);
+    const cities = await placesRepository.getCitiesByDepartmentDaneCode(departmentDaneCode, searchText);
     return createResponse(true, cities);
   }catch(error){
     throw new Error(error.message);
