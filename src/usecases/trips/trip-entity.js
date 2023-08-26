@@ -1,4 +1,4 @@
-class UserEntity {
+class TripEntity {
 
   constructor(id, origin, destination, seats, tripDate, description, responsibleUserEmail) {
     this.id = id;
@@ -23,4 +23,4 @@ class UserEntity {
   }
 }
 
-module.exports = UserEntity;
+module.exports = TripEntity;

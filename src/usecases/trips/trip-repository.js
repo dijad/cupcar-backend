@@ -1,4 +1,4 @@
-const TripEntity = require('./trip-entity');
+const TripEntityGet = require('./trip-entity-get');
 
 class TripRepository {
 
@@ -47,55 +47,88 @@ class TripRepository {
       let connection = self.getConnection();
       let params = [];
       let sql = `
-        SELECT
-          t.id,
-          t.description,
-          t.origin,
-          t.destination,
-          t.responsible_user,
-          t.seats,
-          t.trip_date
-        FROM
-          trips t
-        WHERE
-          t.deleted_at IS NULL
-      `;
+      select
+        t.id,
+        t.description,
+        t.seats,
+        t.trip_date,
+        u.id as user_id,
+        u.name as user_name,
+        u.last_name as user_last_name,
+        u.phone as user_phone,
+        u.email as user_email,
+        p_origin.city_dane_code  as origin_code,
+        p_origin.department_name as origin_department,
+        p_origin.city_name as origin_city,
+        p_destination.city_dane_code  as destination_code,
+        p_destination.department_name as destination_department,
+        p_destination.city_name as destination_city
+      from
+        trips t
+      join users u on
+        u.id = t.responsible_user
+      join places p_origin on
+        p_origin.city_dane_code = t.origin
+      join places p_destination on
+        p_destination.city_dane_code = t.destination
+      where
+        t.deleted_at IS NULL
+    `;
+
+      let conditions = [];
+
       if (origin) {
         params.push(origin);
-        sql +=  'AND t.origin = ?';
+        conditions.push(`t.origin = $${params.length}`);
       }
       if (destination) {
         params.push(destination);
-        sql +=  'AND t.destination = ?';
+        conditions.push(`t.destination = $${params.length}`);
       }
       if (seats) {
         params.push(seats);
-        sql += 'AND t.seats >= ?';
+        conditions.push(`t.seats = $${params.length}`);
       }
-
       if (dateIn) {
         params.push(dateIn);
-        sql += ' AND t.trip_date = ?'
+        if (dateIn.split(' ').length === 1) {
+          conditions.push(`DATE(t.trip_date) = $${params.length}`);
+        } else {
+          conditions.push(`t.trip_date = $${params.length}`);
+        }
       }
-      sql = connection.format(sql, params);
-      connection.query(sql, function (err, result) {
+
+      if (conditions.length > 0) {
+        sql += ` AND (${conditions.join(" OR ")})`;
+      }
+
+      connection.query(sql, params, function (err, result) {
         if (err) {
           console.error(TripRepository.name, "failed with ->", JSON.stringify(err))
-          reject(new Error('Se encontró un problema en sistema, contactar a soporte.'))
+          reject(new Error('Se encontró un problema en el sistema, contactar a soporte.'));
         } else {
-          if (result.length === 0) {
+          if (result.rowCount < 1) {
             resolve([]);
           } else {
             let trips = [];
-            result.map(row => {
-              const trip = new TripEntity(
+            result.rows.map(row => {
+              row.trip_date.setHours(row.trip_date.getHours() - 5);
+              const trip = new TripEntityGet(
                 row.id,
-                row.origin,
-                row.destination,
-                row.seats,
                 row.description,
+                row.seats,
                 row.trip_date,
-                row.responsible_user
+                row.user_id,
+                row.user_name,
+                row.user_last_name,
+                row.user_phone,
+                row.user_email,
+                row.origin_code,
+                row.origin_department,
+                row.origin_city,
+                row.destination_code,
+                row.destination_department,
+                row.destination_city,
               );
               trips.push(trip.serialize());
             })
@@ -106,5 +139,6 @@ class TripRepository {
     });
   }
 }
+
 
 module.exports = TripRepository;

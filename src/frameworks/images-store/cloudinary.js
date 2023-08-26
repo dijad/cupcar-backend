@@ -17,7 +17,7 @@ async function uploadImage(filePath) {
       folder: 'cupcar/user-photos' // Set the directory for uploaded images to "images" in Cloudinary
     });
   } catch (error) {
-  console.log("🚀 ~ file: cloudinary.js:16 ~ uploadImage ~ error:", error)
+    throw new Error(error.message);
   }
 }
 
@@ -25,7 +25,7 @@ async function deleteImage(publicId) {
   try {
     return initCloudinary().uploader.destroy(publicId)
   } catch (error) {
-    console.log("🚀 ~ file: cloudinary.js:16 ~ uploadImage ~ error:", error)
+    throw new Error(error.message);
   }
 }
 

@@ -31,8 +31,8 @@ function tripRouterV1(tripRepository) {
 
   router.get('/v1/clients/trip', [verifyToken, verifyIsClient] ,async (req, res) => {
     try {
-      const { origin, destination, seats } = req.query;
-      const responseGetTrips= await getTripsByAttributes(tripRepository, origin, destination, seats);
+      const { origin, destination, seats, date } = req.query;
+      const responseGetTrips= await getTripsByAttributes(tripRepository, origin, destination, seats, date);
 
       res.status(200).send({
         status: responseGetTrips.status,

@@ -24,18 +24,18 @@ async function createTrip(tripRepository, origin = null, destination = null, sea
   }
 }
 
-async function getTripsByAttributes(tripRepository, origin = null, destination = null, seats = null) {
+async function getTripsByAttributes(tripRepository, origin = null, destination = null, seats = null, date = null) {
 
   if (seats == 0) {
     seats = null
   };
 
-  const payloadTrip = [origin, destination, seats];
+  const payloadTrip = [origin, destination, seats, date];
   if (validateAllNullsInArrayOfData(payloadTrip)) {
     return createResponse(false, 'Es necesario al menos un campo de búsqueda.');
   }
 
-  const trips = await tripRepository.getTripsByAttributes(origin, destination, Number(seats));
+  const trips = await tripRepository.getTripsByAttributes(origin, destination, Number(seats), date);
 
   return createResponse(true, trips);
 }
