@@ -18,4 +18,20 @@ async function getCitiesByDepartmentDaneCode(placesRepository, departmentDaneCod
   }
 }
 
-module.exports = { getDepartments, getCitiesByDepartmentDaneCode };
+async function getCitiesFromText(placesRepository, searchText) {
+  try {
+    const cities = await placesRepository.getCitiesFromText(searchText);
+
+    const unifiedCities = cities.map(city => ({
+      id: city.id,
+      cityDanecode: city.cityDaneCode,
+      name: `${city.cityName}, ${city.departmentName}`
+    }));
+
+    return createResponse(true, unifiedCities);
+  } catch (error) {
+    throw error;
+  }
+}
+
+module.exports = { getDepartments, getCitiesByDepartmentDaneCode, getCitiesFromText };
