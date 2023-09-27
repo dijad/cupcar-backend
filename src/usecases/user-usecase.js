@@ -56,7 +56,7 @@ async function signUp(usersRepository, name = null, lastname = null, email, pass
 async function login(usersRepository, email, password) {
 
   if (!isEmail(email)) {
-    return createResponse(false, 'Formato de correo electrónico no valido.');
+    return createResponse(false, 'Formato de correo electrónico no válido.');
   }
 
   const user = await usersRepository.getUserByEmail(email);

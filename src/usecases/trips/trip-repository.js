@@ -47,7 +47,7 @@ class TripRepository {
       let connection = self.getConnection();
       let params = [];
       let sql = `
-      select
+      SELECT
         t.id,
         t.description,
         t.seats,
@@ -63,15 +63,15 @@ class TripRepository {
         p_destination.city_dane_code  as destination_code,
         p_destination.department_name as destination_department,
         p_destination.city_name as destination_city
-      from
+      FROM
         trips t
-      join users u on
-        u.id = t.responsible_user
-      join places p_origin on
-        p_origin.city_dane_code = t.origin
-      join places p_destination on
-        p_destination.city_dane_code = t.destination
-      where
+      JOIN
+        users u ON u.id = t.responsible_user
+      JOIN
+        places p_origin ON p_origin.city_dane_code = t.origin
+      JOIN
+        places p_destination ON p_destination.city_dane_code = t.destination
+      WHERE
         t.deleted_at IS NULL
     `;
 
@@ -90,11 +90,13 @@ class TripRepository {
         conditions.push(`t.seats = $${params.length}`);
       }
       if (dateIn) {
-        params.push(dateIn);
-        if (dateIn.split(' ').length === 1) {
+        if (dateIn.split(' ').length === 1) {//solo fecha
+          params.push(dateIn);
           conditions.push(`DATE(t.trip_date) = $${params.length}`);
-        } else {
-          conditions.push(`t.trip_date = $${params.length}`);
+        } else {//fecha y hora
+          params.push(dateIn);
+          params.push(dateIn);
+          conditions.push(`(t.trip_date BETWEEN ($${params.length - 1}::timestamp - INTERVAL '15 minutes') AND ($${params.length}::timestamp + INTERVAL '15 minutes'))`);
         }
       }
 
@@ -104,7 +106,7 @@ class TripRepository {
 
       connection.query(sql, params, function (err, result) {
         if (err) {
-          console.error(TripRepository.name, "failed with ->", JSON.stringify(err))
+          console.error(TripRepository.name, "failed with ->", JSON.stringify(err.message));
           reject(new Error('Se encontró un problema en el sistema, contactar a soporte.'));
         } else {
           if (result.rowCount < 1) {

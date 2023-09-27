@@ -8,7 +8,7 @@ function verifyToken(req, res, next) {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
   if (!token) {
-    return res.status(401).send(createResponse(false, 'Acceso no autorizado, se debe proporcionar un token valido'));
+    return res.status(401).send(createResponse(false, 'Acceso no autorizado, se debe proporcionar un token válido'));
   }
 
   try {
